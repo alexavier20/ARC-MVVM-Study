@@ -9,6 +9,12 @@
 import Foundation
 import UIKit
 
+protocol RepositoriesDisplaying: AnyObject {
+    func displayLoading()
+    func hideLoading()
+    func display(repositories: [RepositoryListResponse])
+}
+
 class RepositoriesViewController: UIViewController {
     
 }

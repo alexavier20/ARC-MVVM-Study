@@ -8,30 +8,30 @@
 
 import Foundation
 
-protocol HomePresenting: AnyObject {
-    var viewController: HomeDisplaying? { get set }
+protocol RepositoriesPresenting: AnyObject {
+    var viewController: RepositoriesDisplaying? { get set }
     func presentLoading(isLoaded: Bool)
-    func present(pokemons: [PokemonListResponse])
+    func present(repositories: [RepositoryListResponse])
     func presentError()
 }
 
-final class HomePresenter {
-    weak var viewController: HomeDisplaying?
-    private let coordinator: HomeCoordinating
+final class RepositoriesPresenter {
+    weak var viewController: RepositoriesDisplaying?
+    private let coordinator: RepositoriesCoordinating
     
-    init(coordinator: HomeCoordinating) {
+    init(coordinator: RepositoriesCoordinating) {
         self.coordinator = coordinator
     }
 }
 
-extension HomePresenter: HomePresenting {
+extension RepositoriesPresenter: RepositoriesPresenting {
     
     func presentLoading(isLoaded: Bool) {
         isLoaded ? viewController?.hideLoading() : viewController?.displayLoading()
     }
     
-    func present(pokemons: [PokemonListResponse]) {
-        viewController?.display(pokemons: pokemons)
+    func present(repositories: [RepositoryListResponse]) {
+        viewController?.display(repositories: repositories)
     }
     
     func presentError() {
