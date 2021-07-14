@@ -7,3 +7,21 @@
 //
 
 import Foundation
+
+struct RepositoryDetails: Decodable {
+    let name: String
+    let htmlUrl: String
+    let description: String?
+    let createdAt: String   
+    let language: String
+    let forks: Int
+    let openIssues: Int
+    let owner: Owner
+}
+
+struct Owner: Decodable {
+    let login: String
+    let avatarUrl: String?
+    let id: Int
+}
+

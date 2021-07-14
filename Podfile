@@ -16,5 +16,5 @@ target 'Github-app' do
     # Pods for testing
   end
 
-  pod 'Alamofire', '~> 5.2'
+ 
 end

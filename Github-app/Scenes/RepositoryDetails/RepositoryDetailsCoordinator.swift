@@ -7,3 +7,16 @@
 //
 
 import Foundation
+import UIKit
+
+protocol RepositoryDetailsCoordinating: AnyObject {
+    var viewController: UIViewController? { get set }
+}
+
+final class ReposiotoryDetailsCoordinator {
+    weak var viewController: UIViewController?
+}
+
+extension ReposiotoryDetailsCoordinator: RepositoryDetailsCoordinating {
+    
+}
