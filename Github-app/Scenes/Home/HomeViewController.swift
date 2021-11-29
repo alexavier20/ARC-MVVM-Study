@@ -148,21 +148,17 @@ private extension HomeViewController {
             let searchBarContainer = searchController.searchBar.subviews.first?.subviews[1],
             let textField = searchBarContainer.subviews.first(where: { view in view is UITextField })
         {            
-            textField.backgroundColor = UIColor(named: "roxo2")
+            textField.backgroundColor = .white
             textField.layer.cornerRadius = 4
             textField.layer.masksToBounds = true
         }
+        
+        
         
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
         definesPresentationContext = true
     }
-    
-    //func shouldLoadNextPage(row: Int) -> Bool {
-        //var searchDataSource: [Repository] = interactor.getAllRepository()
-        //row == searchDataSource.endIndex - 1 &&
-        //totalResults > searchDataSource.count
-    //}
 }
 
 extension HomeViewController: UISearchBarDelegate {
@@ -171,10 +167,6 @@ extension HomeViewController: UISearchBarDelegate {
         interactor.clearRepositories()
         interactor.initialFetch(login: searchText)
     }
-    
-    //func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        //interactor.welcome()
-    //}
 }
 
 extension HomeViewController: UITableViewDataSource {
@@ -188,9 +180,6 @@ extension HomeViewController: UITableViewDataSource {
         }
         
         let repository = interactor.getRepository(indexPath: indexPath)
-        //let backgroundview = UIView()
-        //backgroundview.backgroundColor = UIColor(named: "roxo3")
-        //cell.selectedBackgroundView = backgroundview
         cell.setup(repository: repository)
         
         return cell
@@ -278,14 +267,19 @@ extension HomeViewController: HomeDisplaying {
 
 extension HomeViewController: ViewLayout {
     func configureView() {
+        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        let appearance = UINavigationBarAppearance()
+        
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = UIColor(named: "roxo")
+        appearance.titleTextAttributes = textAttributes
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = navigationController?.navigationBar.standardAppearance
+        
         view.backgroundColor = .white
-        navigationController?.navigationBar.barTintColor = UIColor(named: "roxo")
         navigationController?.navigationBar.topItem?.title = "Github App"
         
-        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-        navigationController?.navigationBar.titleTextAttributes = textAttributes
-        
-         setupSearchBar()
+        setupSearchBar()
     }
     
     func configureHierarchy() {
