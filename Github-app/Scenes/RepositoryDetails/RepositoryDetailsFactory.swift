@@ -10,14 +10,12 @@ import Foundation
 
 enum RepositoryDetailsFactory {
     static func make(repositoryName: String, login: String) -> RepositoryDetailsViewController  {
-        let coordinator: RepositoryDetailsCoordinating = ReposiotoryDetailsCoordinator()
-        var presenter: RepositoryDetailsPresenting = RepositoryDetailsPresenter(coordinator: coordinator)
+      
         let service: RepositoryDetailsServicing = RepositoryDetailsService()
-        let interactor: RepositoryDetailsInteracting = RepositoryDetailsInteractor(presenter: presenter, service: service, repositoryName: repositoryName, login: login)
-        let viewController = RepositoryDetailsViewController(interactor: interactor)
+        let viewModel: RepositoryDetailsViewModeling = RepositoryDetailsViewModel(service: service, repositoryName: repositoryName, login: login)
+        let viewController = RepositoryDetailsViewController(repositoryDetailsViewModel: viewModel)
         
-        presenter.viewController = viewController
-        coordinator.viewController = viewController
+        viewModel.viewController = viewController
         
         return viewController        
     }

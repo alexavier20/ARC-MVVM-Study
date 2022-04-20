@@ -22,7 +22,7 @@ protocol HomeDisplaying: AnyObject {
 }
 
 final class HomeViewController: UIViewController {
-    private let interactor: HomeInteracting
+    private let homeViewModel: HomeViewModeling
     
     private lazy var loadingView: UIActivityIndicatorView = {
         if #available(iOS 13.0, *) {
@@ -41,7 +41,7 @@ final class HomeViewController: UIViewController {
         let tableview = UITableView()
         tableview.dataSource = self
         tableview.delegate = self
-      
+        
         tableview.translatesAutoresizingMaskIntoConstraints = false
         
         tableview.register(RepositoryCell.self, forCellReuseIdentifier: RepositoryCell.identifier)
@@ -66,7 +66,6 @@ final class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //interactor.initialFetch()
         buildLayout()
     }
     
@@ -82,9 +81,7 @@ final class HomeViewController: UIViewController {
     func logoImageViewConstraints() {
         NSLayoutConstraint.activate([
             logoImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 64),
-            //logoImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -32),
             logoImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 32),
-            //logoImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -32)
         ])
     }
     
@@ -130,8 +127,8 @@ final class HomeViewController: UIViewController {
         ])
     }
     
-    init(interactor: HomeInteracting) {
-        self.interactor = interactor
+    init(homeViewModel: HomeViewModeling) {
+        self.homeViewModel = homeViewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -147,7 +144,7 @@ private extension HomeViewController {
         if
             let searchBarContainer = searchController.searchBar.subviews.first?.subviews[1],
             let textField = searchBarContainer.subviews.first(where: { view in view is UITextField })
-        {            
+        {
             textField.backgroundColor = .white
             textField.layer.cornerRadius = 4
             textField.layer.masksToBounds = true
@@ -164,14 +161,14 @@ private extension HomeViewController {
 extension HomeViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchText = searchBar.text else { return }
-        interactor.clearRepositories()
-        interactor.initialFetch(login: searchText)
+        homeViewModel.clearRepositories()
+        homeViewModel.search(login: searchText)
     }
 }
 
 extension HomeViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        interactor.repositoriesCount()
+        homeViewModel.repositoriesCount()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -179,7 +176,7 @@ extension HomeViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let repository = interactor.getRepository(indexPath: indexPath)
+        let repository = homeViewModel.getRepository(indexPath: indexPath)
         cell.setup(repository: repository)
         
         return cell
@@ -198,14 +195,14 @@ extension HomeViewController: UITableViewDelegate {
         }
         
         let indexesToRedraw = [indexPath]
-              
+        
         let backgroundview = UIView()
         backgroundview.backgroundColor = UIColor(named: "roxo3")
         cell.selectedBackgroundView = backgroundview
         
-        interactor.fetchRepositoryDetails(indexPath: indexPath)
+        homeViewModel.fetchRepositoryDetails(indexPath: indexPath)
         
-        tableView.reloadRows(at: indexesToRedraw, with: .fade)   
+        tableView.reloadRows(at: indexesToRedraw, with: .fade)
     }
 }
 
@@ -244,7 +241,7 @@ extension HomeViewController: HomeDisplaying {
     }
     
     func displaySearchResponse(shouldDisplay: Bool) {
-         tableView.isHidden = !shouldDisplay
+        tableView.isHidden = !shouldDisplay
     }
     
     func displayEmpty() {
@@ -261,7 +258,7 @@ extension HomeViewController: HomeDisplaying {
     }
     
     func updateDataSource() {
-         tableView.reloadData()
+        tableView.reloadData()
     }
 }
 
@@ -286,13 +283,10 @@ extension HomeViewController: ViewLayout {
         view.addSubview(loadingView)
         view.addSubview(tableView)
         view.addSubview(welcomeView)
-        //view.addSubview(logoImageView)
     }
     
     func configureConstraints() {
         tableViewConstraints()
         welcomeViewConstraints()
-        //logoImageViewConstraints()
     }
-    
 }

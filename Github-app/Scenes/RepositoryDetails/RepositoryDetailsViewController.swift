@@ -18,7 +18,7 @@ protocol RepositoryDetailsDisplaying: AnyObject {
 }
 
 final class RepositoryDetailsViewController: UIViewController {
-    private let interactor: RepositoryDetailsInteracting
+    private let repositoryDetailsViewModel: RepositoryDetailsViewModeling
     
     private lazy var loadingView: UIActivityIndicatorView = {
         if #available(iOS 13.0, *) {
@@ -235,8 +235,8 @@ final class RepositoryDetailsViewController: UIViewController {
         return label
     }()
     
-    init(interactor: RepositoryDetailsInteracting) {
-        self.interactor = interactor
+    init(repositoryDetailsViewModel: RepositoryDetailsViewModeling) {
+        self.repositoryDetailsViewModel = repositoryDetailsViewModel
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -245,7 +245,7 @@ final class RepositoryDetailsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        interactor.initialFetch()
+        repositoryDetailsViewModel.initialFetch()
         buildLayout()
     }
     
@@ -495,7 +495,7 @@ extension RepositoryDetailsViewController: RepositoryDetailsDisplaying {
         let imageUrlString = repositoryDetails.owner.avatarUrl ?? ""
         guard let imageUrl:URL = URL(string: imageUrlString) else {
             return
-        }
+        }   
         
         avatarImageView.loadImge(withUrl: imageUrl)
     }
