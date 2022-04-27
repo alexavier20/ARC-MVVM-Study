@@ -1,4 +1,4 @@
-## Arc-MVVM-Study
+## MVVM-Study
 
 <p>Github-app  é um aplicativo criado para fins de estudo utilizando a arquitetura MVVM. O app tem como objetivo buscar repositórios  por usuários,
 utilizando a API fornecida pelo Github.</p>
